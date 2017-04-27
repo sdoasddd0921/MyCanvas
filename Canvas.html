@@ -3,13 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <title>简易画板</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      font-family: sans-serif;
+    }
+
+    #toolbar {
+      width: 100%;
+      height: 50px;
+      padding: 10px;
+      position: fixed;
+      top: 0;
+      background-color: #2f2f2f;
+      color: #FFF;
+    }
+
+    .radcontrol {
+      width: 30px;
+      height: 30px;
+      background-color: #4f4f4f;
+      display: inline-block;
+      text-align: center;
+      /*padding: 5px;*/
+      line-height: 30px;
+    }
+  </style>
 </head>
 <body style="margin: 0">
-  <div id="tollbar">
+  <div id="toolbar">
     <div id="rad">
       Radius <span id="radval">10</span>
-      <div id="decrad" class="radcontrol"></div>
-      <div id="incrad" class="radcontrol"></div>
+      <div id="decrad" class="radcontrol">-</div>
+      <div id="incrad" class="radcontrol">+</div>
     </div>
   </div>
   <canvas id="canvas"></canvas>
