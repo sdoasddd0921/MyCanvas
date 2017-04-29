@@ -13,7 +13,11 @@
       -webkit-user-select:none;
       -moz-user-select:none;
       -ms-user-select:none;
+    }
 
+    html {
+      overflow-x: hidden;
+      overflow-y: hidden;
     }
 
     canvas {
@@ -33,6 +37,7 @@
     .radcontrol {
       width: 30px;
       height: 30px;
+      border-radius: 5px;
       background-color: #4f4f4f;
       display: inline-block;
       text-align: center;
@@ -63,17 +68,28 @@
     box-shadow: inset 0px 1px 2px rgba(0, 0, 0, 0.5);
   }
 
-  #save {
+  .operation {
     float: right;
+    cursor: pointer;
     margin-right: 20px;
+    border-radius: 5px;
     height: 30px;
     padding: 0 8px;
     line-height: 30px;
     background-color: #434343;
   }
 
-  #save:hover {
+  .operation:hover {
     background-color: #818181;
+  }
+
+  #download {
+    color:#FFF;
+    text-decoration: none;
+  }
+
+  #download:visited {
+    color:#FFF;
   }
 
   </style>
@@ -81,14 +97,17 @@
 <body style="margin: 0">
   <div id="toolbar">
     <div id="rad">
-      Radius <span id="radval">10</span>
+      半径：<span id="radval">10</span>
       <div id="decrad" class="radcontrol">-</div>
       <div id="incrad" class="radcontrol">+</div>
     </div>
     <div id="colors">
     </div>
-    <div id="save">
-      Save
+    <div class="operation" id="save">
+      <a id="download">保存</a>
+    </div>
+    <div class="operation" id="clear">
+      清除
     </div>
   </div>
   <canvas id="canvas"></canvas>

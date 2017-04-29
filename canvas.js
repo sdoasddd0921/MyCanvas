@@ -9,26 +9,43 @@ var minRad = 0.5,
     defaultRad = 20,
     interval = 5,
     radSpan = document.getElementById('radval'),
-    decRad = document.getElementById('decrad'),
-    incRad = document.getElementById('incrad');
-
-// document.body.clientWidth = window.innerWidth;
-// document.body.clientHeight = window.innerHeight;
+    decRad  = document.getElementById('decrad'),
+    incRad  = document.getElementById('incrad'),
+    clear   = document.getElementById('clear');
 
 canvas.width  = window.innerWidth;
 canvas.height = window.innerHeight;
 
 ctx.lineWidth = radius*2;
 
-var putPoint = function(e){
+window.onresize = function(){
+  var image = ctx.getImageData(0,0,canvas.width,canvas.height);
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  ctx.putImageData(image,0,0);
+
+  ctx.lineWidth = radius*2;
+  ctx.fillStyle = defaultColor;
+  ctx.strokeStyle = defaultColor;
+}
+
+function clearCanvas(){
+  canvas.width = canvas.width;
+
+  ctx.lineWidth = radius*2;
+  ctx.fillStyle = defaultColor;
+  ctx.strokeStyle = defaultColor;
+}
+
+function putPoint(e){
   if(dragging){
-    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.lineTo(e.clientX, e.clientY);
     ctx.stroke();
     ctx.beginPath();
-    ctx.arc(e.offsetX, e.offsetY, radius, 0, Math.PI*2);
+    ctx.arc(e.clientX, e.clientY, radius, 0, Math.PI*2);
     ctx.fill();
     ctx.beginPath();
-    ctx.moveTo(e.offsetX, e.offsetY);
+    ctx.moveTo(e.clientX, e.clientY);
   }
 }
 
@@ -46,10 +63,7 @@ canvas.addEventListener('mouseup', disengage);
 canvas.addEventListener('mousedown', engage);
 canvas.addEventListener('mousemove', putPoint);
 
-
-
-
-/*radius.js*/
+/*radius*/
 var setRadius = function(newRadius){
   if(newRadius<minRad)
     newRadius = minRad;
@@ -61,10 +75,12 @@ var setRadius = function(newRadius){
   radSpan.innerHTML = radius;
 }
 
+clear.addEventListener('click', clearCanvas);
 
 decRad.addEventListener('click', function(){
   setRadius(radius-interval);
 });
+
 incRad.addEventListener('click', function(){
   setRadius(radius==0.5?interval:radius+interval);
 });
@@ -72,9 +88,9 @@ incRad.addEventListener('click', function(){
 setRadius(defaultRad);
 
 /* colors */
+var defaultColor = '#000';
 var colors = ['black', 'grey', 'white', 'red', 'orange',
               'yellow','green', 'blue', 'indigo', 'violet'];
-
 
 
 for(var i=0, n=colors.length;i<n;i++) {
@@ -86,6 +102,7 @@ for(var i=0, n=colors.length;i<n;i++) {
 }
 
 function setColor(color) {
+  defaultColor = color;
   ctx.fillStyle = color;
   ctx.strokeStyle = color;
   var active = document.getElementsByClassName('active')[0];
@@ -110,7 +127,26 @@ saveButton.addEventListener('click', saveImage)
 function saveImage() {
   var data = canvas.toDataURL();
 
-  
+  var downloadButton = document.getElementById('download');
 
   // window.open(data, '_blank', 'location=0, menubar=0');
+  downloadFile(downloadButton, getdate(), data);
+}
+
+function getdate() {
+  var now = new Date(),
+      y = now.getFullYear(),
+      M = now.getMonth() + 1,
+      d = now.getDate(),
+      h = now.getHours(),
+      m = now.getMinutes(),
+      s = now.getSeconds();
+  return y + (M < 10 ? "0" + M : M) + (d < 10 ? "0" + d : d) +
+             (h < 10 ? "0" + h : h) + (m < 10 ? "0" + m : m) +
+             (s < 10 ? "0" + s : s);
+}
+
+function downloadFile(aLink, fileName, content){
+    aLink.download = fileName;
+    aLink.href = content;
 }
